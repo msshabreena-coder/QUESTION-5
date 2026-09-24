@@ -4,8 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // If using a Git repository, this pulls the code. 
-                // For a local pipeline job, 'checkout scm' handles it automatically.
+                // Pulls the code from your Git repository
                 checkout scm
             }
         }
@@ -15,13 +14,14 @@ pipeline {
                 stage('Run Unit Check') {
                     steps {
                         echo 'Starting Unit Check Stage...'
-                        sh 'python3 unit_check.py'
+                        // Use bat instead of sh for Windows Jenkins agents
+                        bat 'python unit_check.py'
                     }
                 }
                 stage('Run Integration Check') {
                     steps {
                         echo 'Starting Integration Check Stage...'
-                        sh 'python3 integration_check.py'
+                        bat 'python integration_check.py'
                     }
                 }
             }
@@ -37,10 +37,11 @@ pipeline {
 
     post {
         success {
-            echo '🎉 SUCCESS: The entire pipeline completed smoothly!'
+            echo 'SUCCESS: The entire pipeline completed smoothly!'
         }
         failure {
-            echo '❌ FAILURE: One or more stages failed during execution.'
+            echo 'FAILURE: One or more stages failed during execution.'
         }
     }
 }
+
